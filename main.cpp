@@ -1,5 +1,5 @@
-#include "top-it-vector.hpp"
 #include <iostream>
+#include "top-it-vector.hpp"
 
 bool testDefaultVector()
 {
@@ -28,8 +28,7 @@ bool testCopyConstructor()
   v.pushBack(1);
   topit::Vector< int > yav = v;
   bool isAllEqual = v.getSize() == yav.getSize();
-  for (size_t i = 0; isAllEqual && i < v.getSize(); ++i)
-  {
+  for (size_t i = 0; isAllEqual && i < v.getSize(); ++i) {
     isAllEqual = isAllEqual && (v[i] == yav[i]);
   }
   return isAllEqual;
@@ -38,21 +37,24 @@ bool testCopyConstructor()
 int main()
 {
   using test_t = bool (*)();
-  using pair_t = std::pair< const char*, test_t >;
-  pair_t tests[] = { {"Default vector should be empty", testDefaultVector},
+  using pair_t = std::pair< const char *, test_t >;
+
+  pair_t tests[] = {{"Default vector should be empty", testDefaultVector},
                     {"Vector with any value is not empty", testVectorWithValue},
                     {"Inbound access elements", testElementAccess},
-                    {"Sizes must be equal as elements", testCopyConstructor} };
+                    {"Sizes must be equal as elements", testCopyConstructor}};
+
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
   bool pass = true;
-  for (size_t i = 0; i < count; ++i)
-  {
+
+  for (size_t i = 0; i < count; ++i) {
     bool res = tests[i].second();
-    std::cout << res << ": ";
-    std::cout << tests[i].first << '\n';
+    std::cout << res << ": " << tests[i].first << '\n';
     pass = pass && res;
   }
-  std::cout << pass;
-  std::cout << ": RESULT\n";
+
+  std::cout << pass << ": RESULT\n";
+
+  return 0;
 }
