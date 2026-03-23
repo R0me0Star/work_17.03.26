@@ -1,4 +1,5 @@
 #include <iostream>
+#include <utility>
 #include "top-it-vector.hpp"
 
 bool testDefaultVector()
@@ -34,6 +35,43 @@ bool testCopyConstructor()
   return isAllEqual;
 }
 
+bool testPushFront()
+{
+  topit::Vector< int > v;
+  v.pushBack(2);
+  v.pushBack(3);
+  v.pushFront(1);
+
+  return v.getSize() == 3 && v[0] == 1 && v[1] == 2 && v[2] == 3;
+}
+
+bool testPopBack()
+{
+  topit::Vector< int > v;
+  v.pushBack(10);
+  v.pushBack(20);
+  v.popBack();
+
+  return v.getSize() == 1 && v[0] == 10;
+}
+
+bool testCapacityGrowth()
+{
+  topit::Vector< int > v;
+  bool cap0 = (v.getCapacity() == 0);
+
+  v.pushBack(1);
+  bool cap1 = (v.getCapacity() == 1);
+
+  v.pushBack(2);
+  bool cap2 = (v.getCapacity() == 2);
+
+  v.pushBack(3);
+  bool cap4 = (v.getCapacity() == 4);
+
+  return cap0 && cap1 && cap2 && cap4;
+}
+
 int main()
 {
   using test_t = bool (*)();
@@ -42,7 +80,10 @@ int main()
   pair_t tests[] = {{"Default vector should be empty", testDefaultVector},
                     {"Vector with any value is not empty", testVectorWithValue},
                     {"Inbound access elements", testElementAccess},
-                    {"Sizes must be equal as elements", testCopyConstructor}};
+                    {"Sizes must be equal as elements", testCopyConstructor},
+                    {"Push front shifts elements correctly", testPushFront},
+                    {"Pop back reduces size correctly", testPopBack},
+                    {"Capacity doubles when full", testCapacityGrowth}};
 
   const size_t count = sizeof(tests) / sizeof(pair_t);
   std::cout << std::boolalpha;
